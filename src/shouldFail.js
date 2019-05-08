@@ -39,26 +39,9 @@ async function shouldFail (promise) {
 }
 
 async function withMessage (promise, message) {
-  // Find out if current version of ganache-core supports revert reason i.e >= 2.2.0.
-  // https://github.com/trufflesuite/ganache-core/releases/tag/v2.2.0
-  const nodeInfo = await web3.eth.getNodeInfo();
-  const matches = /TestRPC\/v([0-9.]+)\/ethereum-js/.exec(nodeInfo);
-  const warn = function (msg) {
-    console.log(`${colors.white.bgBlack('openzeppelin-test-helpers')} ${colors.black.bgYellow('WARN')} \
-shouldFail.reverting.withMessage: ` + msg);
-  };
-  if (matches === null || !(1 in matches)) {
-    // warn users and skip reason check.
-    warn('revert reason checking only supported on Ganache>=2.2.0');
-    return shouldFail(promise);
-  } else if (!semver.satisfies(matches[1], '>=2.2.0')) {
-    // warn users and skip reason check.
-    warn(`current version of Ganache (${matches[1]}) doesn't return revert reason.`);
-    return shouldFail(promise);
-  } else {
-    // actually perform revert reason check.
-    return shouldFailWithMessage(promise, message);
-  }
+  // qtum does not support revert reason yet
+  // warn('revert reason checking only supported on Ganache>=2.2.0');
+  return shouldFail(promise);
 }
 
 shouldFail.reverting = reverting;
